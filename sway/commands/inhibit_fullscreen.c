@@ -27,19 +27,19 @@ struct cmd_results *cmd_inhibit_fullscreen(int argc, char **argv) {
 	}
 
 	// If in the scratchpad, operate on the highest container
-	if (container && !container->workspace) {
-		while (container->parent) {
-			container = container->parent;
+	if (container && !container->current.workspace) {
+		while (container->current.parent) {
+			container = container->current.parent;
 		}
 	}
 
 	bool enable = false;
 	if (strcasecmp(argv[0], "toggle") == 0) {
-		enable = !container->inhibit_fullscreen;
+		enable = !container->current.inhibit_fullscreen;
 	} else {
 		enable = strcasecmp(argv[0], "enable") == 0;
 	}
 
-	container->inhibit_fullscreen = enable;
+	container->pending.inhibit_fullscreen = enable;
 	return cmd_results_new(CMD_SUCCESS, NULL);
 }
